@@ -1,0 +1,15 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET        /                           controllers.Application.index
+GET        /oldhome                    controllers.Application.oldhome
+#GET        /oldhome/tpl1               controllers.Application.tpl1
+#GET        /oldhome/tpl2               controllers.Application.tpl2
+GET        /routes                     controllers.Application.routes
+GET        /jsroutes.js                controllers.Application.jsRoutes(varName ?= "jsRoutes")
+
+GET        /*file                      controllers.GulpAssets.at(file)
+
+# Remove the line below. We no longer use this default asset handling controller directly.
+#GET        /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

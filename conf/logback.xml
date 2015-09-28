@@ -1,0 +1,29 @@
+<configuration>
+    
+  <conversionRule conversionWord="coloredLevel" converterClass="play.api.Logger$ColoredLevel" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%coloredLevel - %logger - %message%n%xException</pattern>
+    </encoder>
+  </appender>
+
+  <!--
+    The logger name is typically the Java/Scala package name.
+    This configures the log level to log at for a package and its children packages.
+  -->
+  <logger name="play" level="INFO" />
+  <logger name="application" level="DEBUG" />
+
+  <!--
+    Commment out the next line or change the root log level from DEBUG to ERROR
+    if you do not need logging to console each time static assets
+    in ui/src and ui/dist are served to a web browser through the GulpAssets controller.
+  -->
+  <logger name="controllers.GulpAssets" level="DEBUG" />
+
+  <root level="DEBUG">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+</configuration>
