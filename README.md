@@ -1,6 +1,6 @@
 # play-gulp-standalone
 
-A seed project which shows how to create a SPA Play Framework application using Gulp task runner for frontend asset compilation without depending on any custom sbt plugins. This is a standalone version of my [SBT Play Gulp plugin](http://www.github.com/mmizutani/sbt-play-gulp).
+A seed project which shows how to create an SPA Play Framework application using Gulp task runner for frontend asset compilation without depending on custom sbt plugins. This is a standalone version of my [SBT Play Gulp plugin](http://www.github.com/mmizutani/sbt-play-gulp) and allows for full control over how to integrate SBT and Gulp.
 
 You can use this Play app template to create a Play Framework & Yeoman Gulp Angular hybrid project.
 
