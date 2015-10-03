@@ -15,7 +15,7 @@ class ApplicationSpec extends Specification {
       val home = route(FakeRequest(GET, "/")).get
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Gulp Angular")
+      contentAsString(home) must contain ("Gulp AngularJS")
     }
 
     "send 404 on a bad request" in new WithApplication {
@@ -30,13 +30,6 @@ class ApplicationSpec extends Specification {
       contentAsString(home) must contain ("Hello Play Framework")
     }
 
-    "render twirl templates in ui/src/views" in new WithApplication {
-      val tpl1 = views.html.tpl1("testing view template 1")
-      contentAsString(tpl1) must contain("testing view template 1")
-      val tpl2 = views.html.tpl2("testing view template 2")(Html(""))
-      contentAsString(tpl2) must contain("testing view template 2")
-    }
-
   }
 
   "GulpAssets Controller" should {
@@ -45,7 +38,7 @@ class ApplicationSpec extends Specification {
       val home = controllers.GulpAssets.index()(FakeRequest())
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Gulp Angular")
+      contentAsString(home) must contain ("Gulp AngularJS")
     }
 
     "prevent directory listing" in new WithApplication {

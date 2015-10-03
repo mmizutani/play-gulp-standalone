@@ -4,7 +4,7 @@ name := "play-gulp-standalone"
 
 version := "1.0"
 
-scalaVersion in ThisBuild := "2.11.7"
+scalaVersion := "2.11.7"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
