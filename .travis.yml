@@ -1,3 +1,19 @@
 language: scala
-scala:
-   - 2.11.7
+jdk:
+  - oraclejdk8
+rvm:
+  - 2.2.2
+cache:
+  bundler: true
+  directories:
+    - $HOME/.ivy2/cache
+    - ui/node_modules
+    - ui/src/bower_components
+node_js:
+  - 0.10
+before_script:
+  - bundle install
+  - npm install -g gulp bower
+  - npm install
+script:
+  - sbt ";gulp;test"
