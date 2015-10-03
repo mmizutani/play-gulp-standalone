@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
-  console.log("Welcome to your Play application's JavaScript!");
+  if (window.console) {
+    console.log("Welcome to your Play application's JavaScript!");
+  }
 
 })();
