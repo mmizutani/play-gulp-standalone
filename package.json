@@ -13,6 +13,6 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "postinstall": "cd ui && npm install && jspm install && gulp build"
+    "postinstall": "cd ui && jspm install && npm install && gulp build"
   }
 }
