@@ -1,5 +1,5 @@
-/ui/src/
-/ui/build/
-/ui/bower_components/
-/ui/jspm_packages/
-/ui/node_modules/
+#/ui/src/
+#/ui/build/
+#/ui/bower_components/
+#/ui/jspm_packages/
+#/ui/node_modules/
