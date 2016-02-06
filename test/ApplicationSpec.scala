@@ -11,11 +11,11 @@ class ApplicationSpec extends Specification {
 
   "Application Controller" should {
 
-    "render the yeoman gulp-angular index page" in new WithApplication {
+    "render the Yeoman Aurelia index page" in new WithApplication {
       val home = route(FakeRequest(GET, "/")).get
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Gulp AngularJS")
+      contentAsString(home) must contain ("Aurelia Navigation Skeleton")
     }
 
     "send 404 on a bad request" in new WithApplication {
@@ -34,15 +34,15 @@ class ApplicationSpec extends Specification {
 
   "GulpAssets Controller" should {
 
-    "render the yeoman gulp-angular index page" in new WithApplication {
+    "render the Yeoman Aurelia index page" in new WithApplication {
       val home = controllers.GulpAssets.index()(FakeRequest())
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Gulp AngularJS")
+      contentAsString(home) must contain ("Aurelia Navigation Skeleton")
     }
 
     "prevent directory listing" in new WithApplication {
-      val home = route(FakeRequest(GET, "/assets/")).get
+      val home = route(FakeRequest(GET, "/build/")).get
       status(home) must equalTo(FORBIDDEN)
     }
 

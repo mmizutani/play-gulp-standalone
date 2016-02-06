@@ -10,14 +10,15 @@ object PlayGulp {
 
   lazy val gulpDirectory = SettingKey[File]("gulp-directory", "gulp directory")
   lazy val gulpFile = SettingKey[String]("gulp-file", "gulpfile")
+  lazy val distExcludes = SettingKey[Seq[String]]("dist-excludes")
   lazy val gulpExcludes = SettingKey[Seq[String]]("gulp-excludes")
   lazy val gulp = InputKey[Unit]("gulp", "Task to run gulp")
   lazy val gulpBuild = TaskKey[Int]("gulp-dist", "Task to run dist gulp")
   lazy val gulpClean = TaskKey[Unit]("gulp-clean", "Task to run gulp clean")
   lazy val gulpTest = TaskKey[Unit]("gulp-test", "Task to run gulp test")
+  lazy val postStageClean = taskKey[Unit]("Clean unnecessary build files after stage task")
 
   val playGulpSettings: Seq[Setting[_]] = Seq(
-
     // Specifies the location of the root directory of the Gulp project relative to the Play app root
     gulpDirectory <<= (baseDirectory in Compile) { _ / "ui" },
 
@@ -64,9 +65,32 @@ object PlayGulp {
     // Executes `gulp test` before `sbt test` (optional)
     //(test in Test) <<= (test in Test) dependsOn gulpTest,
 
-    // Ensures that static assets in the ui/dist directory are packaged into
-    // target/scala-2.11/play-gulp-standalone_2.11-x.x.x-web-asset.jar/public when the play app is compiled
-    unmanagedResourceDirectories in Assets <+= (gulpDirectory in Compile)(_ / "dist"),
+    // Ensures that static assets in the ui directory are packaged into
+    // target/scala-2.11/play-gulp-standalone_2.11-x.x.x-web-asset.jar/public when the play app is compiled in the stage and dist tasks
+    unmanagedResourceDirectories in Assets <+= gulpDirectory,
+
+    // FIXME: The following does not correctly apply excludeFilter to unmanagedResourceDirectoy.
+    // So we use alternative solutions to reduce slug size for Heroku deploy
+    // https://devcenter.heroku.com/articles/reducing-the-slug-size-of-play-2-x-applications
+//    distExcludes <<= gulpDirectory(gd => Seq(
+//      gd + "/src/",
+//      gd + "/build/",
+//      gd + "/bower_components/",
+//      gd + "/jspm_packages/",
+//      gd + "/node_modules/"
+//    )),
+//    //https://github.com/sbt/sbt/blob/291059a72b56b009a3af32d811cea81b9e632c1f/main/src/main/scala/sbt/Defaults.scala#L212-L223
+//    //http://mariussoutier.com/blog/2014/12/07/understanding-sbt-sbt-web-settings/
+//    excludeFilter in Assets <<=
+//      (excludeFilter in Assets,
+//        distExcludes in Assets) {
+//        (currentFilter: FileFilter, de) =>
+//          currentFilter || new FileFilter {
+//            def accept(pathname: File): Boolean = {
+//              (true /: de.map(s => pathname.getAbsolutePath.startsWith(s)))(_ && _)
+//            }
+//          }
+//      },
   
     // Starts the gulp watch task before sbt run
     playRunHooks <+= (gulpDirectory, gulpFile).map {
@@ -79,7 +103,11 @@ object PlayGulp {
         Seq(
           "npm",
           "bower",
-          "yo"
+          "yo",
+          "jspm",
+          "ied",
+          "npmd",
+          "git"
         ).map(cmd(_, base))
     }
   )
@@ -90,7 +118,7 @@ object PlayGulp {
     includeFilter in sources in TwirlKeys.compileTemplates := "*.scala.html",
     gulpExcludes <<= gulpDirectory(gd => Seq(
       gd + "/src/app/",
-      gd + "/src/assets/",
+      gd + "/src/dist/",
       gd + "/src/bower_components/"
     )),
     excludeFilter in unmanagedSources <<=
@@ -107,6 +135,18 @@ object PlayGulp {
     // Adds ui/src/views directory's scala view template files to continuous hot reloading
     watchSources <++= gulpDirectory map { path => ((path / "src/views") ** "*.scala.html").get}
   )
+
+  // To run this task, set the Heroku environment variable on command line
+  //   heroku config"set SBT_POST_TASKS=postStageClean
+  // or by adding the following to app.json.
+  //   "env": { "SBT_POST_TASKS": "postStageClean" }
+  // https://github.com/heroku/heroku-buildpack-scala/commit/fdaa1159b8f75909e55566b12a222afef486cf05
+  postStageClean := {
+    val exclDirs = List("src", "build", "bower_components", "jspm_packages", "node_modules")
+    exclDirs.foreach( dir =>
+      sbt.IO.delete(gulpDirectory.value / dir)
+    )
+  }
 
   private def runGulp(base: sbt.File, fileName: String, args: List[String] = List.empty): Process = {
     if (System.getProperty("os.name").startsWith("Windows")) {

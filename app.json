@@ -13,7 +13,8 @@
   "env": {
     "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-multi",
     "NPM_CONFIG_PRODUCTION": "false",
-    "PLAY_APP_SECRET": "G@`kA9@D0DPO]Dx<j?7Pv92Ei41fqHYxkUDU66a8Ba_@2Y1tVvc1/uZ=k205:X6L"
+    "PLAY_APP_SECRET": "G@`kA9@D0DPO]Dx<j?7Pv92Ei41fqHYxkUDU66a8Ba_@2Y1tVvc1/uZ=k205:X6L",
+    "SBT_POST_TASKS": "postStageClean"
   },
   "buildpacks": [
     {

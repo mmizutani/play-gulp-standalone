@@ -49,12 +49,16 @@ class Application @Inject() (router: Router) extends Controller {
     Ok(JavaScriptReverseRouter(varName)(routeCache: _*)).as(JAVASCRIPT)
   }
 
+  val herokuDemo = true
+
   /**
    * Returns a list of all the HTTP action routes for easier debugging
    */
   def routes = Action { request =>
-    if (Play.isProd) NotFound
-    else Ok(views.html.devRoutes(request.method, request.uri, Some(router)))
+    if (Play.isProd && !herokuDemo)
+      NotFound
+    else
+      Ok(views.html.devRoutes(request.method, request.uri, Some(router)))
   }
 
 }

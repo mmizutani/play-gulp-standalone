@@ -1,56 +1,87 @@
 {
-  "name": "ui",
-  "version": "0.0.0",
-  "dependencies": {
-    "browser-sync": "~2.7.12",
-    "browser-sync-spa": "~1.0.2",
-    "chalk": "~1.0.0",
-    "concat-stream": "~1.5.0",
-    "del": "~1.2.0",
-    "gulp": "~3.9.0",
-    "gulp-angular-filesort": "~1.1.1",
-    "gulp-angular-templatecache": "~1.6.0",
-    "gulp-autoprefixer": "~2.3.1",
-    "gulp-csso": "~1.0.0",
-    "gulp-filter": "~2.0.2",
-    "gulp-flatten": "~0.0.4",
-    "gulp-inject": "~1.3.1",
-    "gulp-jshint": "~1.11.0",
-    "gulp-load-plugins": "~0.10.0",
-    "gulp-minify-html": "~1.0.3",
-    "gulp-ng-annotate": "~1.0.0",
-    "gulp-protractor": "~1.0.0",
-    "gulp-rename": "~1.2.2",
-    "gulp-replace": "~0.5.3",
-    "gulp-rev": "~5.0.0",
-    "gulp-rev-replace": "~0.4.2",
-    "gulp-sass": "~2.0.1",
-    "gulp-size": "~1.2.1",
-    "gulp-sourcemaps": "~1.5.2",
-    "gulp-uglify": "~1.2.0",
-    "gulp-useref": "~1.2.0",
-    "gulp-util": "~3.0.5",
-    "http-proxy-middleware": "~0.0.5",
-    "jshint-stylish": "~2.0.0",
-    "karma": "~0.12.36",
-    "karma-angular-filesort": "~0.1.0",
-    "karma-jasmine": "~0.3.5",
-    "karma-ng-html2js-preprocessor": "~0.1.2",
-    "karma-phantomjs-launcher": "~0.2.0",
-    "lodash": "~3.9.3",
-    "main-bower-files": "~2.8.0",
-    "merge-stream": "~0.1.7",
-    "phantomjs": "^1.9.18",
-    "require-dir": "~0.3.0",
-    "uglify-save-license": "~0.4.1",
-    "wiredep": "~2.2.2",
-    "wrench": "~1.5.8"
+  "name": "aurelia-skeleton-navigation",
+  "version": "1.0.0-beta.1.1.2",
+  "description": "A starter kit for building a standard navigation-style app with Aurelia.",
+  "keywords": [
+    "aurelia",
+    "navigation",
+    "skeleton"
+  ],
+  "homepage": "http://aurelia.io",
+  "bugs": {
+    "url": "https://github.com/aurelia/skeleton-navigation/issues"
   },
-  "devDependencies": {},
-  "engines": {
-    "node": ">=0.10.0"
+  "license": "CC0-1.0",
+  "author": "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)",
+  "main": "dist/main.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/aurelia/skeleton-navigation"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "e2e": "gulp serve webdriver-standalone e2e"
+  },
+  "devDependencies": {
+    "aurelia-bundler": "^0.3.0",
+    "aurelia-tools": "^0.1.18",
+    "babel": "^5.8.23",
+    "babel-eslint": "^4.1.3",
+    "browser-sync": "^2.10.0",
+    "conventional-changelog": "0.0.11",
+    "del": "^1.1.0",
+    "gulp": "^3.8.10",
+    "gulp-babel": "^5.1.0",
+    "gulp-bump": "^0.3.1",
+    "gulp-changed": "^1.1.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-protractor": "1.0.0",
+    "gulp-sourcemaps": "^1.3.0",
+    "isparta": "^3.1.0",
+    "istanbul": "^0.3.13",
+    "jasmine-core": "^2.1.3",
+    "jspm": "0.16.15",
+    "karma": "^0.13.15",
+    "karma-babel-preprocessor": "^5.2.1",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-coverage": "^0.5.3",
+    "karma-jasmine": "^0.3.5",
+    "karma-jspm": "2.0.1-beta.2",
+    "object.assign": "^1.0.3",
+    "require-dir": "^0.1.0",
+    "run-sequence": "^1.0.2",
+    "vinyl-paths": "^1.0.0",
+    "yargs": "^2.1.1"
+  },
+  "jspm": {
+    "dependencies": {
+      "aurelia-animator-css": "npm:aurelia-animator-css@^1.0.0-beta.1.1.0",
+      "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-beta.1.1.1",
+      "aurelia-fetch-client": "npm:aurelia-fetch-client@^1.0.0-beta.1.1.0",
+      "aurelia-framework": "npm:aurelia-framework@^1.0.0-beta.1.1.0",
+      "aurelia-history-browser": "npm:aurelia-history-browser@^1.0.0-beta.1.1.1",
+      "aurelia-loader-default": "npm:aurelia-loader-default@^1.0.0-beta.1.1.1",
+      "aurelia-logging-console": "npm:aurelia-logging-console@^1.0.0-beta.1.1.3",
+      "aurelia-router": "npm:aurelia-router@^1.0.0-beta.1.1.0",
+      "aurelia-templating-binding": "npm:aurelia-templating-binding@^1.0.0-beta.1.1.0",
+      "aurelia-templating-resources": "npm:aurelia-templating-resources@^1.0.0-beta.1.1.0",
+      "aurelia-templating-router": "npm:aurelia-templating-router@^1.0.0-beta.1.1.0",
+      "bootstrap": "github:twbs/bootstrap@^3.3.5",
+      "fetch": "github:github/fetch@^0.10.1",
+      "font-awesome": "npm:font-awesome@^4.5.0",
+      "text": "github:systemjs/plugin-text@^0.0.3"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^2.0.3"
+    },
+    "overrides": {
+      "npm:core-js@2.0.3": {
+        "main": "client/shim.min"
+      }
+    }
   }
 }

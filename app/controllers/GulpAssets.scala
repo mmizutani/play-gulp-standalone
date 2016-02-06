@@ -35,9 +35,10 @@ object GulpAssets extends controllers.Assets(DefaultHttpErrorHandler) {
   val basePaths: List[java.io.File] = runtimeDevDirs match {
     case Some(dirs:List[String]) => dirs.map(Play.application.getFile _)
     case _ => List(
-      Play.application.getFile("ui/.tmp/serve"),
+      Play.application.getFile("ui/dist"),
       Play.application.getFile("ui/src"),
-      Play.application.getFile("ui")
+      Play.application.getFile("ui"),
+      Play.application.getFile("public")
     )
   }
 

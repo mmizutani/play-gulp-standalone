@@ -1,17 +1,20 @@
 # play-gulp-standalone
 
-[![Build Status](https://travis-ci.org/mmizutani/play-gulp-standalone.svg)](https://travis-ci.org/mmizutani/play-gulp-standalone)
+This jspm branch is an Aurelia-jspm version of [play-gulp-standalone](https://github.com/mmizutani/play-gulp-standalone) demo app. You can execute [jspm](http://jspm.io/) commands in the sbt console session.
 
-A seed project which shows how to create an SPA Play Framework application using Gulp task runner for frontend asset compilation without depending on custom sbt plugins. This is a standalone version of my [SBT Play Gulp plugin](http://www.github.com/mmizutani/sbt-play-gulp) and allows for full control over how to integrate SBT and Gulp.
+This seed project shows how to create an SPA Play Framework application using Gulp task runner for frontend asset compilation without depending on custom sbt plugins. This is a standalone version of my [SBT Play Gulp plugin](http://www.github.com/mmizutani/sbt-play-gulp) and allows for full control over how to integrate SBT and Gulp.
 
 You can use this Play app template to create a Play Framework & Yeoman Gulp Angular hybrid project.
 
-Unlike the [demo project](https://github.com/mmizutani/play-gulp-demo) for the SBT Play Gulp plugin, you do not need to depend on my custom sbt plugin.
+Unlike the [demo project for the SBT Play Gulp plugin](https://github.com/mmizutani/play-gulp-demo), you do not need to depend on my custom sbt plugin. You just need to adjust the following two files to match the directory structure of your frontend project in the `ui` directory:
+
+* app/controllers/GulpAssets.scala
+* project/PlayGulp.scala
 
 
 ## Online Demo
 
-https://play-gulp-standalone.herokuapp.com
+https://play-gulp-aurelia-jspm.herokuapp.com/
 
 
 ## Deploy your own to Heroku
@@ -39,7 +42,7 @@ Install npm (and optionally the LiveReload browser plugin).
 Install gulp and bower packages:
 
 ```
-$ npm install -g gulp bower
+$ npm install -g gulp bower jspm
 ```
 
 Clone and initialize the repo:
@@ -47,7 +50,8 @@ Clone and initialize the repo:
 ```sh
 $ git clone git@github.com:mmizutani/play-gulp-standalone.git
 $ cd play-gulp-standalone
-$ ./postinstall.sh
+$ git checkout jspm
+$ npm install # postinstall executes npm install and jspm install in ui directory
 ```
 
 Check that Gulp runs successfully by running either
@@ -55,38 +59,6 @@ Check that Gulp runs successfully by running either
 ```sh
 $ activator
 > gulp
-Using gulpfile ~/play-gulp-standalone/ui/gulpfile.js
-Starting 'clean'...
-Finished 'clean' after 17 ms
-Starting 'default'...
-Starting 'scripts'...
-Starting 'styles'...
-Starting 'partials'...
-Starting 'fonts'...
-Starting 'other'...
-Finished 'default' after 397 ms
-gulp-inject 2 files into index.scss.
-all files 7.88 kB
-Finished 'scripts' after 641 ms
-Finished 'partials' after 325 ms
-Finished 'fonts' after 292 ms
-Finished 'other' after 254 ms
-Finished 'styles' after 2.04 s
-Starting 'inject'...
-gulp-inject 1 files into index.html.
-gulp-inject 10 files into index.html.
-Finished 'inject' after 70 ms
-Starting 'html'...
-gulp-inject 1 files into index.html.
-'dist/' styles/app-e5505249f9.css 120.34 kB
-'dist/' styles/vendor-1dddaadd0b.css 58.62 kB
-'dist/' scripts/app-b3239829ef.js 6.26 kB
-'dist/' scripts/vendor-3123871ad2.js 442.91 kB
-'dist/' index.html 636 B
-'dist/' all files 628.78 kB
-Finished 'html' after 13 s
-Starting 'build'...
-Finished 'build' after 6.71 μs
 ```
 
 or
@@ -152,6 +124,7 @@ sbt's dist command triggers the `gulp build` task and packages the static assets
 
 You can then unzip `target/universal/play-gulp-standalone-1.0.zip` and again unzip ``/lib/play-gulp-standalone.play-gulp-standalone-1.0-assets.jar` to see how the built static assets are packaged for production.
 
+```
     play-gulp-standalone-1.0.zip (unzipped)
      +- bin/
      +- conf/
@@ -167,83 +140,7 @@ You can then unzip `target/universal/play-gulp-standalone-1.0.zip` and again unz
               +- styles/
               +- favicon.co
               +- index.html
-
-
-## How to use a different Yeoman Gulp template
-
-Install Yeoman and Yeoman gulp-angular template generator in addition to gulp and bower:
-
 ```
-$ npm install -g yo generator-gulp-angular gulp bower
-```
-
-Scaffold your frontend AngularJS HTML project in the subdirectory `play-gulp-standalone/ui`:
-
-```
-$ git clone git@github.com:mmizutani/play-gulp-standalone.git
-$ cd play-gulp-standalone
-$ rm -rf ui
-$ mkdir ui
-$ cd ui
-$ yo gulp-angular
-```
-
-and choose any options which you prefer:
-```
-? Which version of Angular do you want? 1.4.0 (stable)
-? Which Angular's modules would you want to have? (ngRoute and ngResource will be addressed after) angular-animate.js (enable animation features), angular-cookies.js (handle cookie management), angular-touch.js (for mobile development), angular-sanitize.js (to securely parse and manipulate HTML)
-? Would you need jQuery or perhaps Zepto? jQuery 2.x (new version, lighter, IE9+)
-? Would you like to use a REST resource library? ngResource, the official support for RESTful services
-? Would you like to use a router ? UI Router, flexible routing with nested views
-? Which UI framework do you want? Bootstrap, the most popular HTML, CSS, and JS framework
-? How do you want to implements your Bootstrap components? Angular UI Bootstrap, Bootstrap components written in pure AngularJS by the AngularUI Team
-? Which CSS preprocessor do you want? Sass (Node), Node.js binding to libsass, the C version of the popular stylesheet preprocessor, Sass.
-? Which JS preprocessor do you want? None, I like to code in standard JavaScript.
-? Which html template engine would you want? None, I like to code in standard HTML.
-```
-
-When running `npm install gulp-protractor`, you might encounter an error related to selenium-webdriver, node-gyp and bufferutil for [unmet optional dependency](https://code.google.com/p/selenium/issues/detail?id=8566). As a workaround, this repo contains the gulp-protractor folder so that Gulp works regardless of this bug.
-
-For the error that the `libsass` binding was not found, run
-
-```
-$ cd ui
-$ npm rebuild node-sass
-```
-
-
-To adjust the project directory structure, move the bower_components directory and change paths referring to it accordingly:
-
-```
-$ mv bower_components src/
-```
-
-```diff
-ui/gulp/conf.js
-@@ -25,7 +25,7 @@
- exports.wiredep = {
-   exclude: [/bootstrap.js$/, /bootstrap-sass-official\/.*\.js/, /bootstrap\.css/],
--  directory: 'bower_components'
-+  directory: 'src/bower_components'
- };
-```
-
-```diff
-ui/.bowerrc
-@@ -1,3 +1,3 @@
- {
--  "directory": "bower_components"
-+  "directory": "src/bower_components"
- }
-```
-
-Then check whether running Gulp's default task finishes successfully:
-
-```
-$ cd ui
-$ gulp
-```
-
 
 ## Note for Heroku deployment
 
