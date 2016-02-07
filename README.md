@@ -17,6 +17,7 @@ Unlike the [demo project for the SBT Play Gulp plugin](https://github.com/mmizut
 ## Online Demo
 
 https://play-gulp-aurelia-jspm.herokuapp.com/
+![Demo](screencast.gif)
 
 
 ## Deploy your own to Heroku
@@ -52,10 +53,10 @@ The majority of the code which was used in the sbt-play-gulp plugin moved from a
 
 Install npm (and optionally the LiveReload browser plugin).
 
-Install gulp and bower packages:
+Install gulp and jspm:
 
 ```
-$ npm install -g gulp bower jspm
+$ npm install -g gulp jspm
 ```
 
 Clone and initialize the repo:

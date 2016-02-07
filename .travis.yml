@@ -3,18 +3,19 @@ sudo: false
 jdk:
   - oraclejdk8
 rvm:
-  - 2.2.2
+  - 2.2.4
 cache:
   bundler: true
   directories:
     - $HOME/.ivy2/cache
+    - node_modules
     - ui/node_modules
-    - ui/src/bower_components
+    - ui/jspm_packages
 node_js:
-  - 0.10
+  - "node"
 before_script:
   - bundle install
-  - npm install -g gulp bower
+  - npm install -g gulp jspm
   - npm install
 script:
   - sbt ";gulp;test"
