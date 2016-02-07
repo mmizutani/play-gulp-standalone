@@ -3,7 +3,7 @@ sudo: false
 jdk:
   - oraclejdk8
 before_install:
-  - gem install bundler
+  - sed -i '2d' Gemfile
 rvm:
   - 2.2.4
 cache:
