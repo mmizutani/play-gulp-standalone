@@ -1,6 +1,6 @@
 # play-gulp-standalone
 
-This jspm branch is an Aurelia-jspm version of [play-gulp-standalone](https://github.com/mmizutani/play-gulp-standalone) demo app. You can execute [jspm](http://jspm.io/) commands in the sbt console session.
+This jspm branch is an Aurelia-jspm version of [play-gulp-standalone](https://github.com/mmizutani/play-gulp-standalone) demo app based on the [Yeoman Aurelia generator template](https://github.com/zewa666/generator-aurelia). You can execute [jspm](http://jspm.io/) commands in the sbt console session.
 
 This seed project shows how to create an SPA Play Framework application using Gulp task runner for frontend asset compilation without depending on custom sbt plugins. This is a standalone version of my [SBT Play Gulp plugin](http://www.github.com/mmizutani/sbt-play-gulp) and allows for full control over how to integrate SBT and Gulp.
 
