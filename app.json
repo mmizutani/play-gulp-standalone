@@ -4,8 +4,9 @@
   "keywords": [
     "Play",
     "Gulp",
-    "Angular",
-    "Yeoman"
+    "Aurelia",
+    "Yeoman",
+    "jspm"
   ],
   "website": "https://github.com/mmizutani/play-gulp-standalone",
   "repository": "https://github.com/mmizutani/play-gulp-standalone.git",
