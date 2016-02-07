@@ -17,7 +17,7 @@ Unlike the [demo project for the SBT Play Gulp plugin](https://github.com/mmizut
 ## Online Demo
 
 https://play-gulp-aurelia-jspm.herokuapp.com/
-![Demo](screencast.gif)
+<img src="./screencast.gif" width="640" alt="Demo">
 
 
 ## Deploy your own to Heroku
