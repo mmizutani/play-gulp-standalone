@@ -1,5 +1,7 @@
 # play-gulp-standalone
 
+[![Build Status](https://travis-ci.org/mmizutani/play-gulp-standalone.svg?branch=jspm)](https://travis-ci.org/mmizutani/play-gulp-standalone/tree/jspm)
+
 This jspm branch is an Aurelia-jspm version of [play-gulp-standalone](https://github.com/mmizutani/play-gulp-standalone) demo app based on the [Yeoman Aurelia generator template](https://github.com/zewa666/generator-aurelia). You can execute [jspm](http://jspm.io/) commands in the sbt console session.
 
 This seed project shows how to create an SPA Play Framework application using Gulp task runner for frontend asset compilation without depending on custom sbt plugins. This is a standalone version of my [SBT Play Gulp plugin](http://www.github.com/mmizutani/sbt-play-gulp) and allows for full control over how to integrate SBT and Gulp.
@@ -24,6 +26,12 @@ Thanks to the powerful [Heroku multi build pack](https://github.com/ddollar/hero
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 Since this is a complex project, the first deployment to Heroku might take 5 to 10 minutes. Enjoy a cup or two of coffee while the Heroku server does heavy lifting for you.
+
+If deployment to Heroku halted with an error like "warn Timed out on lookup for github:systemjs/plugin-text,", you should add a private GitHub access token to Heroku config variables to increase the timeout limits of package download for jspm:
+
+```sh
+$ heroku config:set JSPM_GITHUB_AUTH_TOKEN=your_github_username:your_github_access_token_generated_with_publicrepo_scope
+```
 
 
 ## How this works
