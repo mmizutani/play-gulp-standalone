@@ -2,6 +2,8 @@ language: scala
 sudo: false
 jdk:
   - oraclejdk8
+before_install:
+  - gem install bundler
 rvm:
   - 2.2.4
 cache:
