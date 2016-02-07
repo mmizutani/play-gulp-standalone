@@ -27,10 +27,15 @@ Thanks to the powerful [Heroku multi build pack](https://github.com/ddollar/hero
 
 Since this is a complex project, the first deployment to Heroku might take 5 to 10 minutes. Enjoy a cup or two of coffee while the Heroku server does heavy lifting for you.
 
-If deployment to Heroku halted with an error like "warn Timed out on lookup for github:systemjs/plugin-text,", you should add a private GitHub access token to Heroku config variables to increase the timeout limits of package download for jspm:
+If deployment to Heroku halted with an error like "warn Timed out on lookup for github:systemjs/plugin-text,", you should add a private GitHub access token to Heroku config variables to increase the timeout limits of package downloading by jspm:
 
 ```sh
-$ heroku config:set JSPM_GITHUB_AUTH_TOKEN=your_github_username:your_github_access_token_generated_with_publicrepo_scope
+$ cd ui
+$ jspm registry config github
+  # Prompt asks your GitHub username and access token you generated
+$ jspm registry export github
+jspm config registries.github.auth an_unencrypted_base64_encoding_of_GitHub_usename:access_token
+$ heroku config:set JSPM_GITHUB_AUTH_TOKEN=an_unencrypted_base64_encoding_of_GitHub_usename:access_token
 ```
 
 
