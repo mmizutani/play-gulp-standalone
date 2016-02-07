@@ -137,7 +137,7 @@ object PlayGulp {
   )
 
   // To run this task, set the Heroku environment variable on command line
-  //   heroku config"set SBT_POST_TASKS=postStageClean
+  //   heroku config:set SBT_POST_TASKS=postStageClean
   // or by adding the following to app.json.
   //   "env": { "SBT_POST_TASKS": "postStageClean" }
   // https://github.com/heroku/heroku-buildpack-scala/commit/fdaa1159b8f75909e55566b12a222afef486cf05
