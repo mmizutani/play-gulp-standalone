@@ -143,15 +143,15 @@ object PlayGulp {
 
       object GulpSubProcessHook extends PlayRunHook {
 
-        var process: Option[Process] = None
+        var watchProcess: Option[Process] = None
 
         override def beforeStarted(): Unit = {
-          process = Some(runGulp(base, fileName, "watch" :: Nil))
+          watchProcess = Some(runGulp(base, fileName, "watch" :: Nil))
         }
 
         override def afterStopped(): Unit = {
-          process.foreach(_.destroy())
-          process = None
+          watchProcess.foreach(_.destroy())
+          watchProcess = None
         }
       }
 

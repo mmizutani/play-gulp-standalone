@@ -3,34 +3,40 @@ package controllers
 import play.api._
 import play.api.mvc._
 import play.api.mvc.{Action, Controller}
-import play.api.routing.{ JavaScriptReverseRouter, Router, JavaScriptReverseRoute }
-import play.api.Play.current
+import play.api.routing.{JavaScriptReverseRoute, JavaScriptReverseRouter, Router}
 import play.twirl.api.Html
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Provider, Singleton}
 
 @Singleton
-class Application @Inject() (router: Router) extends Controller {
+class Application(env: Environment,
+                  gulpAssets: GulpAssets,
+                  router: => Option[Router] = None) extends Controller {
+
+  // Router needs to be wrapped by Provider to avoid circular dependency when doing DI
+  @Inject
+  def this(env: Environment, gulpAssets: GulpAssets, router: Provider[Router]) =
+    this(env, gulpAssets, Some(router.get))
 
   /**
-   * Returns ui/src/index.html in dev/test mode and ui/dist/index.html in production mode
-   */
-  def index = GulpAssets.index
-	
+    * Returns ui/src/index.html in dev/test mode and ui/dist/index.html in production mode
+    */
+  def index = gulpAssets.index
+
   def oldhome = Action {
     Ok(views.html.index("Play Framework"))
   }
 
   // (Optional)
   // Enable `withTemplates` setting in build.sbt and place Twirl scala.html templates in ui/src/app/views folders
-//  def tpl1 = Action {
-//    Ok(views.html.tpl1("Compiled from a scala template!"))
-//  }
-//
-//  def tpl2 = Action {
-//    Ok(views.html.tpl2("Scala template in Angular")
-//      (Html("<p>This is a play scala html view compiled by the twirl template engine.</p>"))
-//    )
-//  }
+  //  def tpl1 = Action {
+  //    Ok(views.html.tpl1("Compiled from a scala template!"))
+  //  }
+  //
+  //  def tpl2 = Action {
+  //    Ok(views.html.tpl2("Scala template in Angular")
+  //      (Html("<p>This is a play scala html view compiled by the twirl template engine.</p>"))
+  //    )
+  //  }
 
   // Collects JavaScript routes using reflection
   val routeCache: Array[JavaScriptReverseRoute] = {
@@ -42,19 +48,23 @@ class Application @Inject() (router: Router) extends Controller {
   }
 
   /**
-   * Returns the JavaScript router that the client can use for "type-safe" routes.
-   * @param varName The name of the global variable, defaults to `jsRoutes`
-   */
+    * Returns the JavaScript router that the client can use for "type-safe" routes.
+    * @param varName The name of the global variable, defaults to `jsRoutes`
+    */
   def jsRoutes(varName: String = "jsRoutes") = Action { implicit request =>
     Ok(JavaScriptReverseRouter(varName)(routeCache: _*)).as(JAVASCRIPT)
   }
 
+  val herokuDemo = true
+
   /**
-   * Returns a list of all the HTTP action routes for easier debugging
-   */
+    * Returns a list of all the HTTP action routes for easier debugging
+    */
   def routes = Action { request =>
-    if (Play.isProd) NotFound
-    else Ok(views.html.devRoutes(request.method, request.uri, Some(router)))
+    if (env.mode == Mode.Prod && !herokuDemo)
+      NotFound
+    else
+      Ok(views.html.devRoutes(request.method, request.uri, Some(router.get)))
   }
 
 }

@@ -1,49 +1,46 @@
-import org.specs2.mutable._
-import org.specs2.runner._
-import org.junit.runner._
-
+import akka.stream.Materializer
+import org.scalatestplus.play._
 import play.api.test._
 import play.api.test.Helpers._
-import play.twirl.api.Html
 
-@RunWith(classOf[JUnitRunner])
-class ApplicationSpec extends Specification {
+/**
+  * Add your spec here.
+  * You can mock out a whole application including requests, plugins etc.
+  * For more information, consult the wiki.
+  */
+class ApplicationSpec extends PlaySpec with OneAppPerTest {
 
-  "Application Controller" should {
+  implicit lazy val materializer: Materializer = app.materializer
 
-    "render the yeoman gulp-angular index page" in new WithApplication {
-      val home = route(FakeRequest(GET, "/")).get
-      status(home) must equalTo(OK)
-      contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Gulp AngularJS")
-    }
+  "Router" should {
 
-    "send 404 on a bad request" in new WithApplication {
-      val result = route(FakeRequest(GET, "/boum")).get
+    "send 404 on a bad request" in {
+      val result = route(app, FakeRequest(GET, "/boum")).get
       status(result) mustEqual NOT_FOUND
-    }
-
-    "render the old index page" in new WithApplication {
-      val home = route(FakeRequest(GET, "/oldhome")).get
-      status(home) must equalTo(OK)
-      contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Hello Play Framework")
     }
 
   }
 
-  "GulpAssets Controller" should {
+  "Application Controller" should {
 
-    "render the yeoman gulp-angular index page" in new WithApplication {
-      val home = controllers.GulpAssets.index()(FakeRequest())
-      status(home) must equalTo(OK)
-      contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Gulp AngularJS")
+    "render the yeoman gulp-angular index page" in {
+      val home = route(app, FakeRequest(GET, "/")).get
+      status(home) mustBe OK
+      contentType(home) mustBe Some("text/html")
+      contentAsString(home) must include ("Gulp AngularJS")
     }
 
-    "prevent directory listing" in new WithApplication {
-      val home = route(FakeRequest(GET, "/assets/")).get
-      status(home) must equalTo(FORBIDDEN)
+    "render the old index page" in {
+      //implicit val materializer = app.materializer
+      val oldhome = route(app, FakeRequest(GET, "/oldhome")).get
+      status(oldhome) mustBe OK
+      contentType(oldhome) mustBe Some("text/html")
+      contentAsString(oldhome) must include ("Play Framework")
+    }
+
+    "prevent directory listing" in {
+      val assetsDir = route(app, FakeRequest(GET, "/assets/")).get
+      status(assetsDir) mustEqual FORBIDDEN
     }
 
   }

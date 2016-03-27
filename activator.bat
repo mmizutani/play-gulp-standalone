@@ -36,14 +36,16 @@ if defined var1 (
   )
 )
 
-if "%ACTIVATOR_HOME%"=="" (
-	set "ACTIVATOR_HOME=%~dp0"
-	@REM remove trailing "\" from path
-	set ACTIVATOR_HOME=!ACTIVATOR_HOME:~0,-1!
-)
+@REM determine ACTIVATOR_HOME environment variable
+set BIN_DIRECTORY=%~dp0
+set BIN_DIRECTORY=%BIN_DIRECTORY:~0,-1%
+for %%d in (%BIN_DIRECTORY%) do set ACTIVATOR_HOME=%%~dpd
+set ACTIVATOR_HOME=%ACTIVATOR_HOME:~0,-1%
+
+echo ACTIVATOR_HOME=%ACTIVATOR_HOME%
 
 set ERROR_CODE=0
-set APP_VERSION=1.3.6
+set APP_VERSION=1.3.9
 set ACTIVATOR_LAUNCH_JAR=activator-launch-%APP_VERSION%.jar
 
 rem Detect if we were double clicked, although theoretically A user could
@@ -215,8 +217,8 @@ set JAVA_FRIENDLY_HOME=/!JAVA_FRIENDLY_HOME_1: =%%20!
 
 rem Checks if the command contains spaces to know if it should be wrapped in quotes or not
 set NON_SPACED_CMD=%_JAVACMD: =%
-if "%_JAVACMD%"=="%NON_SPACED_CMD%" %_JAVACMD% %DEBUG_OPTS% %MEM_OPTS% %ACTIVATOR_OPTS% %SBT_OPTS% %_JAVA_OPTS% "-Dactivator.home=%JAVA_FRIENDLY_HOME%" -jar "%ACTIVATOR_HOME%\%ACTIVATOR_LAUNCH_JAR%" %CMDS%
-if NOT "%_JAVACMD%"=="%NON_SPACED_CMD%" "%_JAVACMD%" %DEBUG_OPTS% %MEM_OPTS% %ACTIVATOR_OPTS% %SBT_OPTS% %_JAVA_OPTS% "-Dactivator.home=%JAVA_FRIENDLY_HOME%" -jar "%ACTIVATOR_HOME%\%ACTIVATOR_LAUNCH_JAR%" %CMDS%
+if "%_JAVACMD%"=="%NON_SPACED_CMD%" %_JAVACMD% %DEBUG_OPTS% %MEM_OPTS% %ACTIVATOR_OPTS% %SBT_OPTS% %_JAVA_OPTS% "-Dactivator.home=%JAVA_FRIENDLY_HOME%" -jar "%ACTIVATOR_HOME%\libexec\%ACTIVATOR_LAUNCH_JAR%" %CMDS%
+if NOT "%_JAVACMD%"=="%NON_SPACED_CMD%" "%_JAVACMD%" %DEBUG_OPTS% %MEM_OPTS% %ACTIVATOR_OPTS% %SBT_OPTS% %_JAVA_OPTS% "-Dactivator.home=%JAVA_FRIENDLY_HOME%" -jar "%ACTIVATOR_HOME%\libexec\%ACTIVATOR_LAUNCH_JAR%" %CMDS%
 
 if ERRORLEVEL 1 goto error
 goto end

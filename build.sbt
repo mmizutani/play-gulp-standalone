@@ -2,9 +2,9 @@ import PlayGulp._
 
 name := "play-gulp-standalone"
 
-version := "1.0"
+version := "1.1"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
@@ -16,7 +16,10 @@ lazy val root = (project in file("."))
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= Seq(
-  specs2 % Test
+  jdbc,
+  cache,
+  ws,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0-RC1" % Test
 )
 
 routesGenerator := InjectedRoutesGenerator
