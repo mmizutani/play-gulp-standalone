@@ -69,28 +69,23 @@ object PlayGulp {
     // target/scala-2.11/play-gulp-standalone_2.11-x.x.x-web-asset.jar/public when the play app is compiled in the stage and dist tasks
     unmanagedResourceDirectories in Assets <+= gulpDirectory,
 
-    // FIXME: The following does not correctly apply excludeFilter to unmanagedResourceDirectoy.
-    // So we use alternative solutions to reduce slug size for Heroku deploy
-    // https://devcenter.heroku.com/articles/reducing-the-slug-size-of-play-2-x-applications
-//    distExcludes <<= gulpDirectory(gd => Seq(
-//      gd + "/src/",
-//      gd + "/build/",
-//      gd + "/bower_components/",
-//      gd + "/jspm_packages/",
-//      gd + "/node_modules/"
-//    )),
-//    //https://github.com/sbt/sbt/blob/291059a72b56b009a3af32d811cea81b9e632c1f/main/src/main/scala/sbt/Defaults.scala#L212-L223
-//    //http://mariussoutier.com/blog/2014/12/07/understanding-sbt-sbt-web-settings/
-//    excludeFilter in Assets <<=
-//      (excludeFilter in Assets,
-//        distExcludes in Assets) {
-//        (currentFilter: FileFilter, de) =>
-//          currentFilter || new FileFilter {
-//            def accept(pathname: File): Boolean = {
-//              (true /: de.map(s => pathname.getAbsolutePath.startsWith(s)))(_ && _)
-//            }
-//          }
-//      },
+    distExcludes <<= gulpDirectory(gd => Seq(
+      gd + "/src/",
+      gd + "/build/",
+      gd + "/bower_components/",
+      gd + "/jspm_packages/",
+      gd + "/node_modules/"
+    )),
+    excludeFilter in Assets <<=
+      (excludeFilter in Assets,
+        distExcludes in Assets) {
+        (currentFilter: FileFilter, de) =>
+          currentFilter || new FileFilter {
+            def accept(pathname: File): Boolean = {
+              (true /: de.map(s => pathname.getAbsolutePath.startsWith(s)))(_ && _)
+            }
+          }
+      },
   
     // Starts the gulp watch task before sbt run
     playRunHooks <+= (gulpDirectory, gulpFile).map {
@@ -183,15 +178,15 @@ object PlayGulp {
 
       object GulpSubProcessHook extends PlayRunHook {
 
-        var process: Option[Process] = None
+        var watchProcess: Option[Process] = None
 
         override def beforeStarted(): Unit = {
-          process = Some(runGulp(base, fileName, "watch" :: Nil))
+          watchProcess = Some(runGulp(base, fileName, "watch" :: Nil))
         }
 
         override def afterStopped(): Unit = {
-          process.foreach(_.destroy())
-          process = None
+          watchProcess.foreach(_.destroy())
+          watchProcess = None
         }
       }
 

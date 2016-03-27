@@ -1,18 +1,18 @@
 package controllers
 
+import javax.inject._
 import java.io.File
-import javax.inject.Singleton
+
 import play.api._
-import play.api.mvc.{AnyContent, Action}
-import play.api.Play.current
-import play.api.http.DefaultHttpErrorHandler
+import play.api.mvc.{Action, AnyContent, Controller}
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 import scala.concurrent.Future
-import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 
-object GulpAssets extends controllers.Assets(DefaultHttpErrorHandler) {
+@Singleton
+class GulpAssets @Inject() (env: Environment, conf: Configuration) extends Controller {
 
   private lazy val logger = Logger(getClass)
 
@@ -30,15 +30,15 @@ object GulpAssets extends controllers.Assets(DefaultHttpErrorHandler) {
   }
 
   // List of UI directories from which static assets are served in the development mode
-  val runtimeDevDirs: Option[java.util.List[String]] = Play.configuration.getStringList("yeoman.devDirs")
-  // A directory in higher priority comes first.
-  val basePaths: List[java.io.File] = runtimeDevDirs match {
-    case Some(dirs:List[String]) => dirs.map(Play.application.getFile _)
+  val runtimeDirs = conf.getStringList("gulp.devDirs")
+  val basePaths: List[java.io.File] = runtimeDirs match {
+    case Some(dirs) => dirs.map(env.getFile).toList
+    // If "gulp.devDirs" is not specified in conf/application.conf
     case _ => List(
-      Play.application.getFile("ui/dist"),
-      Play.application.getFile("ui/src"),
-      Play.application.getFile("ui"),
-      Play.application.getFile("public")
+      env.getFile("ui/dist"),
+      env.getFile("ui/src"),
+      env.getFile("ui"),
+      env.getFile("public")
     )
   }
 
@@ -82,7 +82,11 @@ object GulpAssets extends controllers.Assets(DefaultHttpErrorHandler) {
   private[controllers] def prodAssetHandler(file: String): Action[AnyContent] = Assets.at("/public", file)
 
 
-  lazy val atHandler: String => Action[AnyContent] = if (Play.isProd) prodAssetHandler(_: String) else devAssetHandler(_: String)
+  lazy val atHandler: String => Action[AnyContent] =
+    env.mode match {
+      case Mode.Prod => prodAssetHandler(_: String)
+      case _ => devAssetHandler(_: String)
+    }
 
   /**
    * Asset handler for development/test/production modes
@@ -92,11 +96,4 @@ object GulpAssets extends controllers.Assets(DefaultHttpErrorHandler) {
    */
   def at(file: String): Action[AnyContent] = atHandler(file)
 
-}
-
-@Singleton
-class GulpAssets extends controllers.Assets(DefaultHttpErrorHandler) {
-  // These two static methods are used in the routes file and twirl scala.html template files.
-  def index = GulpAssets.index
-  def at(file: String) = GulpAssets.at(file: String)
 }

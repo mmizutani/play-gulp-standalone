@@ -3,18 +3,25 @@ package controllers
 import play.api._
 import play.api.mvc._
 import play.api.mvc.{Action, Controller}
-import play.api.routing.{ JavaScriptReverseRouter, Router, JavaScriptReverseRoute }
-import play.api.Play.current
+import play.api.routing.{JavaScriptReverseRoute, JavaScriptReverseRouter, Router}
 import play.twirl.api.Html
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Provider, Singleton}
 
 @Singleton
-class Application @Inject() (router: Router) extends Controller {
+class Application(env: Environment,
+                  gulpAssets: GulpAssets,
+                  router: => Option[Router] = None) extends Controller {
+
+  //http://stackoverflow.com/a/31140157/1478110
+  //https://github.com/playframework/playframework/blob/master/framework/src/play/src/main/scala/play/api/http/HttpErrorHandler.scala
+  @Inject
+  def this(env: Environment, gulpAssets: GulpAssets, router: Provider[Router]) =
+    this(env, gulpAssets, Some(router.get))
 
   /**
    * Returns ui/src/index.html in dev/test mode and ui/dist/index.html in production mode
    */
-  def index = GulpAssets.index
+  def index = gulpAssets.index
 	
   def oldhome = Action {
     Ok(views.html.index("Play Framework"))
@@ -55,10 +62,10 @@ class Application @Inject() (router: Router) extends Controller {
    * Returns a list of all the HTTP action routes for easier debugging
    */
   def routes = Action { request =>
-    if (Play.isProd && !herokuDemo)
+    if (env.mode == Mode.Prod && !herokuDemo)
       NotFound
     else
-      Ok(views.html.devRoutes(request.method, request.uri, Some(router)))
+      Ok(views.html.devRoutes(request.method, request.uri, Some(router.get)))
   }
 
 }

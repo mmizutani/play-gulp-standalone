@@ -10,8 +10,8 @@ You can use this Play app template to create a Play Framework & Yeoman Gulp Angu
 
 Unlike the [demo project for the SBT Play Gulp plugin](https://github.com/mmizutani/play-gulp-demo), you do not need to depend on my custom sbt plugin. You just need to adjust the following two files to match the directory structure of your frontend project in the `ui` directory:
 
-* app/controllers/GulpAssets.scala
-* project/PlayGulp.scala
+* [app/controllers/GulpAssets.scala](https://github.com/mmizutani/play-gulp-standalone/blob/jspm/app/controllers/GulpAssets.scala)
+* [project/PlayGulp.scala](https://github.com/mmizutani/play-gulp-standalone/blob/jspm/project/PlayGulp.scala)
 
 
 ## Online Demo
