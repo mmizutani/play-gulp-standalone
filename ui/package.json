@@ -48,9 +48,11 @@
   },
   "devDependencies": {},
   "engines": {
-    "node": ">=0.10.0"
+    "node": "5.9.1",
+    "npm": "3.7.3"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "postinstall": "npm rebuild node-sass"
   }
 }
