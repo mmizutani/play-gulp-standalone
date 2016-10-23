@@ -13,6 +13,10 @@ Unlike the [demo project](https://github.com/mmizutani/play-gulp-demo) for the S
 
 https://play-gulp-standalone.herokuapp.com
 
+* The frontend page built with Gulp is served at the root path [`/`](https://play-gulp-standalone.herokuapp.com/).
+* The default Play landing page is available at the path [`/oldhome`](https://play-gulp-standalone.herokuapp.com/oldhome).
+* You can see the list of available routes at [`/routes`](https://play-gulp-standalone.herokuapp.com/routes).
+
 
 ## Deploy your own to Heroku
 
